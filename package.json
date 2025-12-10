@@ -1,0 +1,120 @@
+{
+  "name": "hll-ai-box",
+  "displayName": "HLL AI BOX",
+  "description": "HLL AI BOX commands, mcps, rules management extension",
+  "version": "0.1.6",
+  "publisher": "ci-ai-box",
+  "author": "HLL Autodev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.huolala.cn/group-arch/aibox-extensions.git"
+  },
+  "keywords": [
+    "HLL AI BOX",
+    "aibox",
+    "AI BOX",
+    "CI AI BOX",
+    "commands",
+    "mcps",
+    "cursor",
+    "rules"
+  ],
+  "engines": {
+    "vscode": "^1.105.1"
+  },
+  "categories": [
+    "AI",
+    "Tools"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "icon": "resources/icons/ai-ci-icon.png",
+  "contributes": {
+    "keybindings": [
+      {
+        "command": "ai-box.chat.sendMessage",
+        "key": "ctrl+shift+enter",
+        "mac": "cmd+shift+enter",
+         "when": "editorTextFocus"
+      }
+    ],
+    "commands": [
+      {
+        "command": "ai-box.openPanel",
+        "title": "Go to AI Box"
+      },
+      {
+        "command": "ai-box.executeCursorChatViewer",
+        "title": "AIBOX: ChatHistory"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ai-box.openPanel",
+          "group": "navigation@1",
+          "when": "editorFocus"
+        },
+        {
+          "command": "ai-box.executeCursorChatViewer",
+          "group": "aibox@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "ai-box.openPanel",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "ai-box-panel",
+          "title": "AIBox Console",
+          "icon": "resources/icons/ai-ci-icon.png"
+        }
+      ]
+    },
+    "views": {
+      "ai-box-panel": [
+        {
+          "id": "ai-box.logView",
+          "name": "AIBox Console",
+          "type": "webview",
+          "visibility": "visible"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "npx @vscode/vsce package --baseContentUrl https://gitlab.huolala.cn/group-arch/aibox-extensions --baseImagesUrl https://gitlab.huolala.cn/group-arch/aibox-extensions/-/raw",
+    "publish": "npx @vscode/vsce publish --baseContentUrl https://gitlab.huolala.cn/group-arch/aibox-extensions --baseImagesUrl https://gitlab.huolala.cn/group-arch/aibox-extensions/-/raw && npx ovsx publish -p ovsxp_01f5e2de-f25d-4261-b49f-504eada26252 --baseContentUrl https://gitlab.huolala.cn/group-arch/aibox-extensions --baseImagesUrl https://gitlab.huolala.cn/group-arch/aibox-extensions/-/raw"
+  },
+  "devDependencies": {
+    "@types/node": "^16.18.0",
+    "@types/vscode": "^1.105.1",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.3",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "overrides": {
+    "markdown-it": {
+      "punycode": "^2.3.1"
+    }
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "punycode": "^2.3.1"
+  }
+}

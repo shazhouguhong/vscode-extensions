@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src {{cspSource}} 'unsafe-inline'; script-src {{cspSource}}; font-src {{cspSource}}; img-src {{cspSource}} data: https:;">
+    <title>🤖 AI BOX</title>
+    <link rel="stylesheet" href="{{stylesUri}}">
+</head>
+<body>
+    <div class="container">
+            <div class="header-actions" style="display: none;">
+                <button id="get-cursor-login-btn" class="btn-cursor-login" title="Get Cursor Login Info">🔑 Cursor Login</button>
+                <button id="fetch-chat-history-btn" class="btn-cursor-login" title="Fetch Chat History">💬 Chat History</button>
+                <button id="send-chat-message-btn" class="btn-cursor-login" title="Send Chat Message">📤 Send Message</button>
+            </div>
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="commands">任务列表</button>
+                <button class="tab" data-tab="commands-list">Commands</button>
+                <button class="tab" data-tab="rules">Rules</button>
+                <button class="tab" data-tab="mcps">MCP 市场</button>
+            </div>
+            <div class="header-nav-buttons" style="display: none;">
+                <a href="https://micro.huolala.work/gateway/page/mcp-market" target="_blank" class="nav-external-link">MCP市场管理</a>
+                <a href="https://aibox-portal-v-stg.huolala.work/" target="_blank" class="nav-external-link">AIBOX管理</a>
+            </div>
+        </div>
+
+        <div id="commands-tab" class="tab-content active">
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-group appid-filter-wrapper">
+                        <label class="filter-label">App ID</label>
+                        <div class="custom-select-wrapper">
+                            <input type="text" id="task-appid-filter" class="filter-input custom-select-input" 
+                                   placeholder="输入或选择 App ID..." autocomplete="off">
+                            <button type="button" class="custom-select-arrow" id="appid-dropdown-btn">▼</button>
+                            <div class="custom-select-dropdown" id="appid-dropdown" style="display: none;">
+                                <div class="custom-select-option" data-value="">全部</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Assigner</label>
+                        <input type="text" id="task-assigner-filter" class="filter-input" placeholder="Filter by assigner...">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Executor</label>
+                        <input type="text" id="task-executor-filter" class="filter-input" placeholder="Filter by executor...">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Status</label>
+                        <select id="task-status-filter" class="filter-select">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="to_accept">To Accept</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Level</label>
+                        <select id="task-level-filter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="project">Project</option>
+                            <option value="user">User</option>
+                            <option value="team">Team</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-search" data-action="search" data-target="commands">🔍 Search</button>
+                        <button class="btn-reset" data-action="reset" data-target="commands">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <div class="loading">正在加载任务列表...</div>
+        </div>
+
+        <div id="commands-list-tab" class="tab-content">
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Keyword</label>
+                        <input type="text" id="cmd-list-keyword-filter" class="filter-input" placeholder="Search by keyword...">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Labels</label>
+                        <select id="cmd-list-labels-filter" class="filter-select">
+                            <option value="0">All Labels</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="display: none;">
+                        <label class="filter-label">Level</label>
+                        <select id="cmd-list-level-filter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="project">Project</option>
+                            <option value="user">User</option>
+                            <option value="team">Team</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-search" data-action="search" data-target="commands-list">🔍 Search</button>
+                        <button class="btn-reset" data-action="reset" data-target="commands-list">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <div class="loading">Loading Commands...</div>
+        </div>
+
+        <div id="mcps-tab" class="tab-content">
+            <div class="mcp-market-container">
+                <!-- 顶部导航栏 -->
+                <div class="top-nav">
+                    <a href="#" class="nav-link active" data-nav="market">服务市场</a>
+                    <!-- <a href="#" class="nav-link" data-nav="my-services">我的服务</a>
+                    <a href="#" class="nav-link" data-nav="recycle">回收站</a> -->
+                </div>
+
+                <!-- 主内容区域 -->
+                <div class="mcp-content-wrapper">
+                    <!-- 左侧分类栏 -->
+                    <div class="category-sidebar">
+                        <div class="category-list">
+                            <div class="category-item active" data-category="all">
+                                <span class="category-name">全部服务</span>
+                                <span class="category-count" id="count-all">0</span>
+                            </div>
+                            <div class="category-item" data-category="featured">
+                                <span class="category-name">精选服务</span>
+                                <span class="category-count" id="count-featured">0</span>
+                            </div>
+                            <div class="category-item" data-category="code-quality">
+                                <span class="category-name">代码质量</span>
+                                <span class="category-count" id="count-code-quality">0</span>
+                            </div>
+                            <div class="category-item" data-category="documentation">
+                                <span class="category-name">文档与学习</span>
+                                <span class="category-count" id="count-documentation">0</span>
+                            </div>
+                            <div class="category-item" data-category="design-tools">
+                                <span class="category-name">设计与开发工具</span>
+                                <span class="category-count" id="count-design-tools">0</span>
+                            </div>
+                            <div class="category-item" data-category="monitoring">
+                                <span class="category-name">监控与分析</span>
+                                <span class="category-count" id="count-monitoring">0</span>
+                            </div>
+                            <div class="category-item" data-category="source-control">
+                                <span class="category-name">源码管理</span>
+                                <span class="category-count" id="count-source-control">0</span>
+                            </div>
+                            <div class="category-item" data-category="database">
+                                <span class="category-name">数据库与存储</span>
+                                <span class="category-count" id="count-database">0</span>
+                            </div>
+                            <div class="category-item" data-category="deployment">
+                                <span class="category-name">部署与云服务</span>
+                                <span class="category-count" id="count-deployment">0</span>
+                            </div>
+                            <div class="category-item" data-category="automation">
+                                <span class="category-name">自动化与集成</span>
+                                <span class="category-count" id="count-automation">0</span>
+                            </div>
+                            <div class="category-item" data-category="other">
+                                <span class="category-name">其他</span>
+                                <span class="category-count" id="count-other">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧主内容区 -->
+                    <div class="main-content">
+                        <!-- 搜索和新增按钮 -->
+                        <div class="search-bar-container">
+                            <div class="search-input-wrapper">
+                                <input type="text" id="mcp-name-filter" class="search-input" placeholder="搜索服务名称、描述等">
+                                <button class="search-btn" id="mcp-search-btn">🔍</button>
+                            </div>
+                            <!-- <button class="btn-add-service" id="add-service-btn">+ 新增服务</button> -->
+                        </div>
+
+                        <!-- 服务卡片网格 -->
+                        <div class="service-cards-grid" id="mcp-cards-container">
+                            <div class="loading">正在加载服务...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rules-tab" class="tab-content">
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Name</label>
+                        <input type="text" id="rule-name-filter" class="filter-input" placeholder="Search by name...">
+                    </div>
+                    <div class="filter-group" style="display: none;">
+                        <label class="filter-label">Level</label>
+                        <select id="rule-level-filter" class="filter-select">
+                            <option value="">All Levels</option>
+                            <option value="project">Project</option>
+                            <option value="user">User</option>
+                            <option value="team">Team</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn-search" data-action="search" data-target="rules">🔍 Search</button>
+                        <button class="btn-reset" data-action="reset" data-target="rules">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <div class="loading">Loading Rules...</div>
+        </div>
+    </div>
+
+    <script src="{{scriptUri}}"></script>
+</body>
+</html>
+
